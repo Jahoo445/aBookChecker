@@ -1,20 +1,10 @@
 import { Router } from '@angular/router';
+import { AudiobookArtist } from '../../types/AudiobookArtist';
 import { SpotifyService } from '../../services/spotify.service';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { AudiobookService } from '../../services/audiobook.service';
 import { ArtistCacheService } from '../../services/artist-cache.service';
-  
-
-type AudiobookArtist = {
-  artistName: string;
-  artistId: string;
-};
-
-type AudiobookArtistWithImage = {
-  artistName: string;
-  artistId: string;
-  imageUrl: string | null;
-};
+import { AudiobookArtistWithImage } from '../../types/AudiobookArtistWithImage';
 
 @Component({
   selector: 'app-list-selection',
@@ -60,7 +50,7 @@ export class ListSelection implements OnInit {
   }
 
   protected _selectAudiobook(audiobook: AudiobookArtistWithImage): void {
-    void this._router.navigate(['/artist', audiobook.artistId]);
+    void this._router.navigate([ '/artist', audiobook.artistId ]);
   }
 
   private async _refreshArtists(): Promise<void> {
@@ -74,7 +64,7 @@ export class ListSelection implements OnInit {
           return {
             artistName: artist.artistName,
             artistId: artist.artistId,
-            imageUrl: spotifyArtist.images[0]?.url ?? null
+            imageUrl: spotifyArtist.images[ 0 ]?.url ?? null
           };
         })
       );
@@ -99,7 +89,7 @@ export class ListSelection implements OnInit {
     }
 
     return currentArtists.every((currentArtist, index) => {
-      const nextArtist = nextArtists[index];
+      const nextArtist = nextArtists[ index ];
 
       return (
         currentArtist.artistId === nextArtist.artistId &&

@@ -1,38 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { SpotifyAlbum } from '../types/SpotifyAlbum';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { SpotifyTokenResponse } from '../types/SpotifyTokenResponse';
+import { SpotifyArtistAlbumsResponse } from '../types/SpotifyArtistAlbumsResponse';
 
-interface SpotifyTokenResponse {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
-}
-
-interface SpotifyArtistResponse {
-  id: string;
-  name: string;
-  images: {
-    url: string;
-    height: number;
-    width: number;
-  }[];
-}
-
-interface SpotifyAlbum {
-  id: string;
-  name: string;
-  images: {
-    url: string;
-    height: number;
-    width: number;
-  }[];
-  release_date: string;
-}
-
-interface SpotifyArtistAlbumsResponse {
-  items: SpotifyAlbum[];
-  total: number;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -66,7 +38,7 @@ export class SpotifyService {
     }
   }
 
-  public async getArtist(artistId: string): Promise<SpotifyArtistResponse> {
+  public async getArtist(artistId: string): Promise<SpotifyAlbum> {
     const token = await this.getAccessToken();
 
     const headers = new HttpHeaders({
@@ -74,7 +46,7 @@ export class SpotifyService {
     });
 
     return await firstValueFrom(
-      this._http.get<SpotifyArtistResponse>(
+      this._http.get<SpotifyAlbum>(
         `https://api.spotify.com/v1/artists/${artistId}`,
         { headers }
       )

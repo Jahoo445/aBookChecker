@@ -1,18 +1,8 @@
+import { SpotifyAlbum } from '../../types/SpotifyAlbum';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { SpotifyService } from '../../services/spotify.service';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ListenStorageService } from '../../services/listen-storage.service';
-
-type SpotifyAlbum = {
-  id: string;
-  name: string;
-  images: {
-    url: string;
-    height: number;
-    width: number;
-  }[];
-  release_date: string;
-};
 
 @Component({
   selector: 'app-artist-albums',

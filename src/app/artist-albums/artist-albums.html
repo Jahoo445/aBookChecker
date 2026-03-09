@@ -44,16 +44,22 @@
         @for (album of _filteredAlbums(); track album.id) {
           <div class="album-card">
             @if (album.images[0]?.url) {
-              <img [src]="album.images[0].url" [alt]="album.name" />
+              <a [href]="album.external_urls.spotify" target="_blank" rel="noopener">
+                <img [src]="album.images[0].url" [alt]="album.name" />
+              </a>
             }
             <div class="album-info">
               <label class="labels"> Listened: </label>
               <div class="listen-counter">
-                <button type="button" id="minusButton" (click)="_decreaseListenCount(album.id)">-</button>
+                <button type="button" id="minusButton" (click)="_decreaseListenCount(album.id)">
+                  -
+                </button>
 
                 <span class="labels">{{ _listenCounts()[album.id] ?? 0 }}</span>
 
-                <button type="button" id="plusButton" (click)="_increaseListenCount(album.id)">+</button>
+                <button type="button" id="plusButton" (click)="_increaseListenCount(album.id)">
+                  +
+                </button>
               </div>
             </div>
           </div>
