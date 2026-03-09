@@ -38,6 +38,19 @@ export class ArtistAlbums implements OnInit {
     });
   });
 
+  protected readonly _progressPercentage = computed(() => {
+    const albums = this._albums();
+    const counts = this._listenCounts();
+
+    if (albums.length === 0) {
+      return 0;
+    }
+
+    const listenedCount = albums.filter(album => (counts[ album.id ] ?? 0) > 0).length;
+
+    return Math.round((listenedCount / albums.length) * 100);
+  });
+
   protected readonly _progressText = computed(() => {
     const albums = this._albums();
     const counts = this._listenCounts();
@@ -65,9 +78,9 @@ export class ArtistAlbums implements OnInit {
     try {
       const albums = await this._spotifyService.getArtistAlbums(artistId);
 
-      const filteredAlbums = albums.filter(album =>
-        /^(Folge|\d+)/i.test(album.name)
-      );
+      const filteredAlbums = albums
+        .filter(album => /^(Folge|\d+)/i.test(album.name))
+        .filter(album => album.name !== '134/ der tote Mönch');
 
       this._albums.set(filteredAlbums);
       this._listenCounts.set(

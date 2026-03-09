@@ -35,6 +35,10 @@
 
     <p class="progress">{{ _progressText() }}</p>
 
+    <div class="progress-bar">
+      <div class="progress-bar-fill" [style.width.%]="_progressPercentage()"></div>
+    </div>
+
     @if (_isLoading()) {
       <p>Loading albums...</p>
     } @else if (_error()) {
