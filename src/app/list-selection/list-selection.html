@@ -7,10 +7,7 @@
     @for (audiobook of _audiobooks(); track audiobook.artistId) {
       <button type="button" class="image-button" (click)="_selectAudiobook(audiobook)">
         @if (audiobook.imageUrl) {
-          <img
-            [src]="audiobook.imageUrl"
-            [alt]="audiobook.artistName"
-          >
+          <img [src]="audiobook.imageUrl" [alt]="audiobook.artistName" />
         } @else {
           <span>{{ audiobook.artistName }}</span>
         }

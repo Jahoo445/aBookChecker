@@ -1,7 +1,7 @@
-import { SpotifyService } from '../../services/spotify';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ListenStorageService } from '../../services/listen-storage';
+import { SpotifyService } from '../../services/spotify.service';
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { ListenStorageService } from '../../services/listen-storage.service';
 
 
 type SpotifyAlbum = {
@@ -61,6 +61,8 @@ export class ArtistAlbums implements OnInit {
     } finally {
       this._isLoading.set(false);
     }
+
+    console.log('Albums loaded:', this._albums());
   }
 
   protected _updateListenCount(albumId: string, value: string): void {
