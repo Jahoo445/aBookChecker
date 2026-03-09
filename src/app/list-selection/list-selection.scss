@@ -1,13 +1,37 @@
 .button-list {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 300px;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  height: 50vh;
+  align-items: center;
 }
 
-button {
-  padding: 12px 16px;
+.image-button {
+  width: 300px;
+  height: 300px;
+  padding: 0;
   border: none;
-  border-radius: 8px;
+  background: transparent;
   cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.image-button img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.image-button span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: #f3f3f3;
+  text-align: center;
+  padding: 12px;
 }

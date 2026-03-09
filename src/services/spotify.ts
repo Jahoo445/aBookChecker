@@ -1,12 +1,26 @@
-import { firstValueFrom } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { SpotifyTokenResponse } from '../types/SpotifyTokenResponse';
+import { firstValueFrom } from 'rxjs';
+
+interface SpotifyTokenResponse {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+}
+
+interface SpotifyArtistResponse {
+  id: string;
+  name: string;
+  images: {
+    url: string;
+    height: number;
+    width: number;
+  }[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class SpotifyService {
   private readonly _clientId = '4f6993cd4fd54564b2f45a0d9a941742';
   private readonly _clientSecret = '9913877d9bdc4065ad25a69b84733471';
@@ -16,7 +30,7 @@ export class SpotifyService {
   private _tokenExpiresAt: number | null = null;
   private _tokenRequest: Promise<string> | null = null;
 
-  constructor(private readonly _http: HttpClient) { }
+  constructor(private readonly _http: HttpClient) {}
 
   public async getAccessToken(): Promise<string> {
     if (this._hasValidToken()) {
@@ -34,6 +48,21 @@ export class SpotifyService {
     } finally {
       this._tokenRequest = null;
     }
+  }
+
+  public async getArtist(artistId: string): Promise<SpotifyArtistResponse> {
+    const token = await this.getAccessToken();
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return await firstValueFrom(
+      this._http.get<SpotifyArtistResponse>(
+        `https://api.spotify.com/v1/artists/${artistId}`,
+        { headers }
+      )
+    );
   }
 
   private _hasValidToken(): boolean {
@@ -60,16 +89,9 @@ export class SpotifyService {
 
     this._accessToken = response.access_token;
 
-    // Refresh a little early so you don’t hit the exact expiration boundary
     const safetyBufferInMs = 60_000;
     this._tokenExpiresAt = Date.now() + response.expires_in * 1000 - safetyBufferInMs;
 
     return response.access_token;
-  }
-
-  public clearTokenCache(): void {
-    this._accessToken = null;
-    this._tokenExpiresAt = null;
-    this._tokenRequest = null;
   }
 }
