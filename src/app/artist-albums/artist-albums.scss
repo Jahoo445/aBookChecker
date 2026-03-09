@@ -41,8 +41,8 @@
   align-items: center;
   padding: 12px;
   border-radius: 12px;
-  background: #f5f5f5;
-  border: 1px solid #ccc;
+  background: #22334b;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
 }
 
 .album-card img {
@@ -69,6 +69,7 @@
   border-radius: 4px;
   padding: 8px 12px;
   cursor: pointer;
+  width: 125px;
 }
 
 #backButton {
@@ -105,7 +106,7 @@
   color: #000;
 }
 
-.listen-counter{
+.listen-counter {
   justify-content: space-between;
   display: flex;
   align-items: center;
@@ -133,5 +134,12 @@
 }
 
 .labels {
-    font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', serif;
+  color: #ccc;
+  cursor: default;
+}
+
+p {
+  font-family: 'Merriweather', serif;
+  color: #ccc;
 }
