@@ -1,0 +1,52 @@
+.album-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.album-card {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f5f5f5;
+}
+
+.album-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.album-info h3 {
+  margin: 0 0 4px;
+}
+
+.album-info p {
+  margin: 0;
+}
+
+.album-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+input {
+  width: 70px;
+  padding: 4px;
+}
+
+.top-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.top-bar button {
+  padding: 8px 12px;
+  cursor: pointer;
+}

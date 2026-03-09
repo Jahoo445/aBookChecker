@@ -1,0 +1,37 @@
+<div class="top-bar">
+  <button routerLink="/">Back</button>
+
+  <button (click)="_toggleUnlistenedFilter()">
+    @if (_showUnlistenedOnly()) {
+      Show all
+    } @else {
+      Show unlistened
+    }
+  </button>
+</div>
+<div class="album-list">
+  @for (album of _filteredAlbums(); track album.id) {
+    <div class="album-card">
+
+      @if (album.images[0]?.url) {
+        <img [src]="album.images[0].url" [alt]="album.name">
+      }
+
+      <div class="album-info">
+        <h3>{{ album.name }}</h3>
+
+        <label>
+          Listened:
+          <input
+            type="number"
+            min="0"
+            [value]="_listenCounts()[album.id] ?? 0"
+            (input)="_updateListenCount(album.id, albumCountInput.value)"
+            #albumCountInput
+          >
+        </label>
+      </div>
+
+    </div>
+  }
+</div>

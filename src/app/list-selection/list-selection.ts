@@ -1,7 +1,7 @@
+import { Router } from '@angular/router';
 import { SpotifyService } from '../../services/spotify';
 import { AudiobookService } from '../../services/audiobook';
 import { Component, OnInit, inject, signal } from '@angular/core';
-
 
 type AudiobookArtist = {
   artistName: string;
@@ -18,11 +18,12 @@ type AudiobookArtistWithImage = {
   selector: 'app-list-selection',
   standalone: true,
   templateUrl: './list-selection.html',
-  styleUrls: [ './list-selection.scss' ]
+  styleUrl: './list-selection.scss'
 })
 export class ListSelection implements OnInit {
   private readonly _audiobookService = inject(AudiobookService);
   private readonly _spotifyService = inject(SpotifyService);
+  private readonly _router = inject(Router);
 
   protected readonly _audiobooks = signal<AudiobookArtistWithImage[]>([]);
   protected readonly _isLoading = signal<boolean>(true);
@@ -53,6 +54,6 @@ export class ListSelection implements OnInit {
   }
 
   protected _selectAudiobook(audiobook: AudiobookArtistWithImage): void {
-    console.log('Selected audiobook:', audiobook);
+    void this._router.navigate([ '/artist', audiobook.artistId ]);
   }
 }

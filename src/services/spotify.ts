@@ -18,6 +18,22 @@ interface SpotifyArtistResponse {
   }[];
 }
 
+interface SpotifyAlbum {
+  id: string;
+  name: string;
+  images: {
+    url: string;
+    height: number;
+    width: number;
+  }[];
+  release_date: string;
+}
+
+interface SpotifyArtistAlbumsResponse {
+  items: SpotifyAlbum[];
+  total: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,7 +46,7 @@ export class SpotifyService {
   private _tokenExpiresAt: number | null = null;
   private _tokenRequest: Promise<string> | null = null;
 
-  constructor(private readonly _http: HttpClient) {}
+  constructor(private readonly _http: HttpClient) { }
 
   public async getAccessToken(): Promise<string> {
     if (this._hasValidToken()) {
@@ -63,6 +79,37 @@ export class SpotifyService {
         { headers }
       )
     );
+  }
+
+  public async getArtistAlbums(artistId: string): Promise<SpotifyAlbum[]> {
+    const token = await this.getAccessToken();
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    const limit = 50;
+    let offset = 0;
+    let total = 0;
+
+    const albums: SpotifyAlbum[] = [];
+
+    do {
+      const response = await firstValueFrom(
+        this._http.get<SpotifyArtistAlbumsResponse>(
+          `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=album&limit=${limit}&offset=${offset}`,
+          { headers }
+        )
+      );
+
+      albums.push(...response.items);
+
+      total = response.total;
+      offset += limit;
+
+    } while (offset < total);
+
+    return albums;
   }
 
   private _hasValidToken(): boolean {
