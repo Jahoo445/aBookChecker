@@ -1,3 +1,32 @@
+.page-layout {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  width: 100%;
+}
+
+.page-center {
+  grid-column: 2;
+}
+
+.top-bar {
+  justify-content: center;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.top-bar input {
+  min-width: 220px;
+  padding: 8px 10px;
+}
+
+.progress {
+  margin: 0 0 16px;
+  font-weight: 600;
+}
+
 .album-list {
   display: grid;
   gap: 16px;
@@ -23,32 +52,86 @@
   border-radius: 8px;
 }
 
-.album-info h3 {
-  margin: 0 0 4px;
-}
-
-.album-info p {
-  margin: 0;
-}
-
-.album-info {
+.album-info label {
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
+  margin-bottom: 5px;
+  align-items: center;
+  width: 200px;
 }
 
-input {
-  width: 70px;
-  padding: 4px;
-}
-
-.top-bar {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.top-bar button {
+#listedOrNot {
+  background: #1db954;
+  color: white;
+  border: none;
+  border-radius: 4px;
   padding: 8px 12px;
   cursor: pointer;
+}
+
+#backButton {
+  background: #e60000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+#searchInput {
+  border: none;
+  border-radius: 4px;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.clear-button {
+  position: absolute;
+  right: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #666;
+}
+
+.clear-button:hover {
+  color: #000;
+}
+
+.listen-counter{
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 20px;
+  color: #666;
+}
+
+#minusButton {
+  background: #e60000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+#plusButton {
+  background: #1db954;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.labels {
+    font-family: 'Merriweather', serif;
 }

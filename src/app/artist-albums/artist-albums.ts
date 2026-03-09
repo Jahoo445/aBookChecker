@@ -1,8 +1,7 @@
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { SpotifyService } from '../../services/spotify.service';
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { ListenStorageService } from '../../services/listen-storage.service';
-
 
 type SpotifyAlbum = {
   id: string;
@@ -33,6 +32,34 @@ export class ArtistAlbums implements OnInit {
   protected readonly _artistId = signal<string | null>(null);
   protected readonly _showUnlistenedOnly = signal<boolean>(false);
   protected readonly _listenCounts = signal<Record<string, number | undefined>>({});
+  protected readonly _searchTerm = signal<string>('');
+
+  protected readonly _filteredAlbums = computed(() => {
+    const albums = this._albums();
+    const counts = this._listenCounts();
+    const showUnlistenedOnly = this._showUnlistenedOnly();
+    const searchTerm = this._searchTerm().trim().toLowerCase();
+
+    return albums.filter(album => {
+      const matchesListenCount = !showUnlistenedOnly || (counts[ album.id ] ?? 0) === 0;
+      const matchesSearch = !searchTerm || album.name.toLowerCase().includes(searchTerm);
+
+      return matchesListenCount && matchesSearch;
+    });
+  });
+
+  protected readonly _progressText = computed(() => {
+    const albums = this._albums();
+    const counts = this._listenCounts();
+
+    if (albums.length === 0) {
+      return '0 / 0 listened';
+    }
+
+    const listenedCount = albums.filter(album => (counts[ album.id ] ?? 0) > 0).length;
+
+    return `${listenedCount} / ${albums.length} listened`;
+  });
 
   public async ngOnInit(): Promise<void> {
     const artistId = this._route.snapshot.paramMap.get('artistId');
@@ -83,19 +110,26 @@ export class ArtistAlbums implements OnInit {
     this._listenStorageService.setListenCount(artistId, albumId, listenCount);
   }
 
-  protected readonly _filteredAlbums = computed(() => {
-    const albums = this._albums();
-    const counts = this._listenCounts();
-    const showUnlistened = this._showUnlistenedOnly();
-
-    if (!showUnlistened) {
-      return albums;
-    }
-
-    return albums.filter(album => (counts[ album.id ] ?? 0) === 0);
-  });
-
   protected _toggleUnlistenedFilter(): void {
     this._showUnlistenedOnly.update(value => !value);
+  }
+
+  protected _updateSearchTerm(value: string): void {
+    this._searchTerm.set(value);
+  }
+
+  protected _increaseListenCount(albumId: string): void {
+    const current = this._listenCounts()[ albumId ] ?? 0;
+    this._updateListenCount(albumId, String(current + 1));
+  }
+
+  protected _decreaseListenCount(albumId: string): void {
+    const current = this._listenCounts()[ albumId ] ?? 0;
+
+    if (current === 0) {
+      return;
+    }
+
+    this._updateListenCount(albumId, String(current - 1));
   }
 }

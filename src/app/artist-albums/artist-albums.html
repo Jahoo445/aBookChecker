@@ -1,37 +1,64 @@
-<div class="top-bar">
-  <button routerLink="/">Back</button>
+<div class="page-layout">
+  <div class="page-center">
+    <div class="top-bar">
+      <button type="button" routerLink="/" id="backButton">Back</button>
 
-  <button (click)="_toggleUnlistenedFilter()">
-    @if (_showUnlistenedOnly()) {
-      Show all
-    } @else {
-      Show unlistened
-    }
-  </button>
-</div>
-<div class="album-list">
-  @for (album of _filteredAlbums(); track album.id) {
-    <div class="album-card">
+      <div class="search-wrapper">
+        <input
+          type="text"
+          placeholder="Search album"
+          [value]="_searchTerm()"
+          (input)="_updateSearchTerm(searchInput.value)"
+          #searchInput
+          id="searchInput"
+        />
 
-      @if (album.images[0]?.url) {
-        <img [src]="album.images[0].url" [alt]="album.name">
-      }
-
-      <div class="album-info">
-        <!-- <h3>{{ album.name }}</h3> -->
-
-        <label>
-          Listened:
-          <input
-            type="number"
-            min="0"
-            [value]="_listenCounts()[album.id] ?? 0"
-            (input)="_updateListenCount(album.id, albumCountInput.value)"
-            #albumCountInput
+        @if (_searchTerm()) {
+          <button
+            type="button"
+            class="clear-button"
+            (click)="_updateSearchTerm(''); searchInput.value = ''"
           >
-        </label>
+            ✕
+          </button>
+        }
       </div>
 
+      <button type="button" (click)="_toggleUnlistenedFilter()" id="listedOrNot">
+        @if (_showUnlistenedOnly()) {
+          Show all
+        } @else {
+          Show unlistened
+        }
+      </button>
     </div>
-  }
+
+    <p class="progress">{{ _progressText() }}</p>
+
+    @if (_isLoading()) {
+      <p>Loading albums...</p>
+    } @else if (_error()) {
+      <p>{{ _error() }}</p>
+    } @else {
+      <div class="album-list">
+        @for (album of _filteredAlbums(); track album.id) {
+          <div class="album-card">
+            @if (album.images[0]?.url) {
+              <img [src]="album.images[0].url" [alt]="album.name" />
+            }
+            <div class="album-info">
+              <label class="labels"> Listened: </label>
+              <div class="listen-counter">
+                <button type="button" id="minusButton" (click)="_decreaseListenCount(album.id)">-</button>
+
+                <span class="labels">{{ _listenCounts()[album.id] ?? 0 }}</span>
+
+                <button type="button" id="plusButton" (click)="_increaseListenCount(album.id)">+</button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
 </div>
