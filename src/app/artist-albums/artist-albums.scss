@@ -52,7 +52,7 @@
   border-radius: 8px;
 }
 
-.album-info label {
+.album-info {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -113,9 +113,10 @@
   gap: 4px;
   font-size: 20px;
   color: #666;
+  width: 200px;
 }
 
-#minusButton {
+.minusButton {
   background: #e60000;
   color: white;
   border: none;
@@ -124,7 +125,7 @@
   cursor: pointer;
 }
 
-#plusButton {
+.plusButton {
   background: #1db954;
   color: white;
   border: none;
@@ -134,13 +135,14 @@
 }
 
 .labels {
-  font-family: 'Merriweather', serif;
+  font-family: Cambria, Georgia, "Times New Roman", Times, serif;
   color: #ccc;
+  font-size: 1.5rem;
   cursor: default;
 }
 
 p {
-  font-family: 'Merriweather', serif;
+  font-family: Cambria, Georgia, "Times New Roman", Times, serif;
   color: #ccc;
 }
 

@@ -2,7 +2,6 @@
   <div class="page-center">
     <div class="top-bar">
       <button type="button" routerLink="/" id="backButton">Back</button>
-
       <div class="search-wrapper">
         <input
           type="text"
@@ -23,7 +22,6 @@
           </button>
         }
       </div>
-
       <button type="button" (click)="_toggleUnlistenedFilter()" id="listedOrNot">
         @if (_showUnlistenedOnly()) {
           Show all
@@ -32,9 +30,7 @@
         }
       </button>
     </div>
-
     <p class="progress">{{ _progressText() }}</p>
-
     <div class="progress-bar">
       <div class="progress-bar-fill" [style.width.%]="_progressPercentage()"></div>
     </div>
@@ -53,15 +49,13 @@
               </a>
             }
             <div class="album-info">
-              <label class="labels"> Listened: </label>
+              <span class="labels"> Listened: </span>
               <div class="listen-counter">
-                <button type="button" id="minusButton" (click)="_decreaseListenCount(album.id)">
+                <button type="button" class="minusButton" (click)="_decreaseListenCount(album.id)">
                   -
                 </button>
-
                 <span class="labels">{{ _listenCounts()[album.id] ?? 0 }}</span>
-
-                <button type="button" id="plusButton" (click)="_increaseListenCount(album.id)">
+                <button type="button" class="plusButton" (click)="_increaseListenCount(album.id)">
                   +
                 </button>
               </div>
