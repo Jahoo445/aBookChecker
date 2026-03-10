@@ -1,38 +1,43 @@
 <div class="page-layout">
   <div class="page-center">
-    <div class="top-bar">
-      <button type="button" routerLink="/" id="backButton">Back</button>
-      <div class="search-wrapper">
-        <input
-          type="text"
-          placeholder="Search album"
-          [value]="_searchTerm()"
-          (input)="_updateSearchTerm(searchInput.value)"
-          #searchInput
-          id="searchInput"
-        />
+    <div class="sticky-top">
+      <div class="top-bar">
+        <button type="button" routerLink="/" id="backButton">Back</button>
 
-        @if (_searchTerm()) {
-          <button
-            type="button"
-            class="clear-button"
-            (click)="_updateSearchTerm(''); searchInput.value = ''"
-          >
-            ✕
-          </button>
-        }
+        <div class="search-wrapper">
+          <input
+            type="text"
+            placeholder="Search album"
+            [value]="_searchTerm()"
+            (input)="_updateSearchTerm(searchInput.value)"
+            #searchInput
+            id="searchInput"
+          />
+
+          @if (_searchTerm()) {
+            <button
+              type="button"
+              class="clear-button"
+              (click)="_updateSearchTerm(''); searchInput.value = ''"
+            >
+              ✕
+            </button>
+          }
+        </div>
+
+        <button type="button" (click)="_toggleUnlistenedFilter()" id="listedOrNot">
+          @if (_showUnlistenedOnly()) {
+            Show all
+          } @else {
+            Show unlistened
+          }
+        </button>
       </div>
-      <button type="button" (click)="_toggleUnlistenedFilter()" id="listedOrNot">
-        @if (_showUnlistenedOnly()) {
-          Show all
-        } @else {
-          Show unlistened
-        }
-      </button>
-    </div>
-    <p class="progress">{{ _progressText() }}</p>
-    <div class="progress-bar">
-      <div class="progress-bar-fill" [style.width.%]="_progressPercentage()"></div>
+
+      <p class="progress">{{ _progressText() }}</p>
+      <div class="progress-bar">
+        <div class="progress-bar-fill" [style.width.%]="_progressPercentage()"></div>
+      </div>
     </div>
 
     @if (_isLoading()) {
@@ -48,8 +53,9 @@
                 <img [src]="album.images[0].url" [alt]="album.name" />
               </a>
             }
+
             <div class="album-info">
-              <span class="labels"> Listened: </span>
+              <span class="labels">Listened:</span>
               <div class="listen-counter">
                 <button type="button" class="minusButton" (click)="_decreaseListenCount(album.id)">
                   -
