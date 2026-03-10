@@ -1,18 +1,16 @@
 import { firstValueFrom } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { SpotifyAlbum } from '../types/SpotifyAlbum';
+import { SpotifyAlbumItem } from '../types/SpotifyAlbumItem';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SpotifyTokenResponse } from '../types/SpotifyTokenResponse';
+import { SpotifyArtistResponse } from '../types/SpotifyArtistResponse';
 import { SpotifyArtistAlbumsResponse } from '../types/SpotifyArtistAlbumsResponse';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpotifyService {
-  private readonly _clientId = '4f6993cd4fd54564b2f45a0d9a941742';
-  private readonly _clientSecret = '9913877d9bdc4065ad25a69b84733471';
-  private readonly _tokenUrl = 'https://accounts.spotify.com/api/token';
+  private readonly _tokenApiUrl = 'https://api.janishofstetter.com/tokens/spotify';
 
   private _accessToken: string | null = null;
   private _tokenExpiresAt: number | null = null;
@@ -38,7 +36,7 @@ export class SpotifyService {
     }
   }
 
-  public async getArtist(artistId: string): Promise<SpotifyAlbum> {
+  public async getArtist(artistId: string): Promise<SpotifyArtistResponse> {
     const token = await this.getAccessToken();
 
     const headers = new HttpHeaders({
@@ -46,14 +44,14 @@ export class SpotifyService {
     });
 
     return await firstValueFrom(
-      this._http.get<SpotifyAlbum>(
+      this._http.get<SpotifyArtistResponse>(
         `https://api.spotify.com/v1/artists/${artistId}`,
         { headers }
       )
     );
   }
 
-  public async getArtistAlbums(artistId: string): Promise<SpotifyAlbum[]> {
+  public async getArtistAlbums(artistId: string): Promise<SpotifyAlbumItem[]> {
     const token = await this.getAccessToken();
 
     const headers = new HttpHeaders({
@@ -64,7 +62,7 @@ export class SpotifyService {
     let offset = 0;
     let total = 0;
 
-    const albums: SpotifyAlbum[] = [];
+    const albums: SpotifyAlbumItem[] = [];
 
     do {
       const response = await firstValueFrom(
@@ -78,10 +76,13 @@ export class SpotifyService {
 
       total = response.total;
       offset += limit;
-
     } while (offset < total);
 
-    return albums;
+    const filteredAlbums = albums
+      .filter(album => /^(Folge|\d+)/i.test(album.name))
+      .filter(album => album.name !== '134/ der tote Mönch');
+
+    return filteredAlbums;
   }
 
   private _hasValidToken(): boolean {
@@ -93,17 +94,8 @@ export class SpotifyService {
   }
 
   private async _fetchAccessToken(): Promise<string> {
-    const body = new URLSearchParams({
-      grant_type: 'client_credentials'
-    }).toString();
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Basic ${btoa(`${this._clientId}:${this._clientSecret}`)}`
-    });
-
     const response = await firstValueFrom(
-      this._http.post<SpotifyTokenResponse>(this._tokenUrl, body, { headers })
+      this._http.get<SpotifyTokenResponse>(this._tokenApiUrl)
     );
 
     this._accessToken = response.access_token;

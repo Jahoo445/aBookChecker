@@ -1,6 +1,6 @@
-import { SpotifyAlbum } from '../../types/SpotifyAlbum';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SpotifyService } from '../../services/spotify.service';
+import { SpotifyAlbumItem } from '../../types/SpotifyAlbumItem';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ListenStorageService } from '../../services/listen-storage.service';
 
@@ -16,13 +16,13 @@ export class ArtistAlbums implements OnInit {
   private readonly _spotifyService = inject(SpotifyService);
   private readonly _listenStorageService = inject(ListenStorageService);
 
+  protected readonly _searchTerm = signal<string>('');
   protected readonly _isLoading = signal<boolean>(true);
   protected readonly _error = signal<string | null>(null);
-  protected readonly _albums = signal<SpotifyAlbum[]>([]);
   protected readonly _artistId = signal<string | null>(null);
+  protected readonly _albums = signal<SpotifyAlbumItem[]>([]);
   protected readonly _showUnlistenedOnly = signal<boolean>(false);
   protected readonly _listenCounts = signal<Record<string, number | undefined>>({});
-  protected readonly _searchTerm = signal<string>('');
 
   protected readonly _filteredAlbums = computed(() => {
     const albums = this._albums();
@@ -78,11 +78,7 @@ export class ArtistAlbums implements OnInit {
     try {
       const albums = await this._spotifyService.getArtistAlbums(artistId);
 
-      const filteredAlbums = albums
-        .filter(album => /^(Folge|\d+)/i.test(album.name))
-        .filter(album => album.name !== '134/ der tote Mönch');
-
-      this._albums.set(filteredAlbums);
+      this._albums.set(albums);
       this._listenCounts.set(
         this._listenStorageService.getListenCountsForArtist(artistId)
       );

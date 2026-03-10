@@ -1,6 +1,11 @@
-import { SpotifyAlbum } from '../types/SpotifyAlbum';
+import { SpotifyAlbumItem } from "./SpotifyAlbumItem";
 
-export interface SpotifyArtistAlbumsResponse {
-  items: SpotifyAlbum[];
+export type SpotifyArtistAlbumsResponse = {
+  href: string;
+  limit: number;
+  next: string | null;
+  offset: number;
+  previous: string | null;
   total: number;
-}
+  items: SpotifyAlbumItem[];
+};
