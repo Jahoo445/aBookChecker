@@ -87,8 +87,6 @@ export class ArtistAlbums implements OnInit {
     } finally {
       this._isLoading.set(false);
     }
-
-    console.log('Albums loaded:', this._albums());
   }
 
   protected _updateListenCount(albumId: string, value: string): void {

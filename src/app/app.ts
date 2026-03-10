@@ -1,6 +1,5 @@
 import { RouterOutlet } from '@angular/router';
 import { Component, signal } from '@angular/core';
-import { ListSelection } from './list-selection/list-selection';
 
 @Component({
   selector: 'app-root',
