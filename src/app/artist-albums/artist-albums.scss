@@ -1,5 +1,5 @@
 .page-layout {
-  height: 75vh;
+  height: 76vh;
 }
 
 .page-center {
@@ -160,4 +160,22 @@ img {
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   margin-top: 16px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 100px;
+  background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6366f1;
 }
